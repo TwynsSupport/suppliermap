@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Supplier-Customer Network</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      width: 100%;
+      height: 800px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      position: relative;
+    }
+    
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    
+    .legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 10;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    
+    .legend .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .legend .color {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      border-radius: 50%;
+    }
+    
+    .reset-button {
+      padding: 5px 10px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .reset-button:hover {
+      background-color: #e9e9e9;
+    }
+    
+    .node {
+      cursor: pointer;
+    }
+    
+    .link {
+      stroke: #999;
+      stroke-opacity: 0.6;
+      stroke-width: 1.5px;
+    }
+    
+    .link.highlighted {
+      stroke: #ff7f0e;
+      stroke-opacity: 1;
+      stroke-width: 3px;
+    }
+    
+    .link.dimmed {
+      stroke-opacity: 0.1;
+    }
+    
+    .node text {
+      pointer-events: none;
+      font-size: 10px;
+      text-anchor: middle;
+    }
+    
+    .info-panel {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 250px;
+      background-color: white;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="controls">
+      <button class="reset-button">Reset View</button>
+    </div>
+    <div class="legend">
+      <h4 style="margin-top: 0;">Legend</h4>
+      <div class="item">
+        <div class="color" style="background-color: #1f77b4;"></div>
+        <span>Supplier</span>
+      </div>
+      <div class="item">
+        <div class="color" style="background-color: #2ca02c;"></div>
+        <span>Customer</span>
+      </div>
+    </div>
+    <div class="info-panel">
+      <h4 id="info-title">Details</h4>
+      <div id="info-content"></div>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    const data = {
+      nodes: [
+        // Suppliers
+        { id: "RDW", type: "supplier", group: 1 },
+        { id: "NPR", type: "supplier", group: 1 },
+        { id: "TomTom", type: "supplier", group: 1 },
+        { id: "ARVOO", type: "supplier", group: 1 },
+        { id: "PrioCom", type: "supplier", group: 1 },
+        { id: "ANPR", type: "supplier", group: 1 },
+        { id: "Callcare", type: "supplier", group: 1 },
+        { id: "More Optimal/Planman", type: "supplier", group: 1 },
+        { id: "BVBSN", type: "supplier", group: 1 },
+        { id: "SCANACAR/ACI", type: "supplier", group: 1 },
+        { id: "CJIB", type: "supplier", group: 1 },
+        { id: "Digipolis", type: "supplier", group: 1 },
+        { id: "OVDB", type: "supplier", group: 1 },
+        { id: "QLIK", type: "supplier", group: 1 },
+        { id: "Desyde", type: "supplier", group: 1 },
+        { id: "Nedap", type: "supplier", group: 1 },
+        { id: "AWS", type: "supplier", group: 1 },
+        
+        // Customers
+        { id: "Altena", type: "customer", group: 2 },
+        { id: "Hogeveen", type: "customer", group: 2 },
+        { id: "NEO", type: "customer", group: 2 },
+        { id: "PZH", type: "customer", group: 2 },
+        { id: "Rijkswaterstaat", type: "customer", group: 2 },
+        { id: "Oosterhout", type: "customer", group: 2 },
+        { id: "Oss", type: "customer", group: 2 },
+        { id: "West Betuwe", type: "customer", group: 2 },
+        { id: "P1", type: "customer", group: 2 },
+        { id: "NS", type: "customer", group: 2 },
+        { id: "Transdev", type: "customer", group: 2 },
+        { id: "PoR", type: "customer", group: 2 },
+        { id: "Antwerp", type: "customer", group: 2 }
+      ],
+      links: [
+        // RDW
+        { source: "RDW", target: "Altena", value: 1, id: "RDW-Altena", camundaLink: "#" },
+        { source: "RDW", target: "Hogeveen", value: 1, id: "RDW-Hogeveen", camundaLink: "#" },
+        { source: "RDW", target: "NEO", value: 1, id: "RDW-NEO", camundaLink: "#" },
+        { source: "RDW", target: "PZH", value: 1, id: "RDW-PZH", camundaLink: "#" },
+        { source: "RDW", target: "Rijkswaterstaat", value: 1, id: "RDW-Rijkswaterstaat", camundaLink: "#" },
+        { source: "RDW", target: "Oosterhout", value: 1, id: "RDW-Oosterhout", camundaLink: "#" },
+        { source: "RDW", target: "Oss", value: 1, id: "RDW-Oss", camundaLink: "#" },
+        { source: "RDW", target: "West Betuwe", value: 1, id: "RDW-West Betuwe", camundaLink: "#" },
+        { source: "RDW", target: "P1", value: 1, id: "RDW-P1", camundaLink: "#" },
+        
+        // NPR
+        { source: "NPR", target: "Altena", value: 1, id: "NPR-Altena", camundaLink: "#" },
+        { source: "NPR", target: "Hogeveen", value: 1, id: "NPR-Hogeveen", camundaLink: "#" },
+        { source: "NPR", target: "NEO", value: 1, id: "NPR-NEO", camundaLink: "#" },
+        { source: "NPR", target: "PZH", value: 1, id: "NPR-PZH", camundaLink: "#" },
+        { source: "NPR", target: "Rijkswaterstaat", value: 1, id: "NPR-Rijkswaterstaat", camundaLink: "#" },
+        { source: "NPR", target: "Oosterhout", value: 1, id: "NPR-Oosterhout", camundaLink: "#" },
+        { source: "NPR", target: "Oss", value: 1, id: "NPR-Oss", camundaLink: "#" },
+        { source: "NPR", target: "West Betuwe", value: 1, id: "NPR-West Betuwe", camundaLink: "#" },
+        { source: "NPR", target: "P1", value: 1, id: "NPR-P1", camundaLink: "#" },
+        
+        // TomTom
+        { source: "TomTom", target: "Altena", value: 1, id: "TomTom-Altena", camundaLink: "#" },
+        { source: "TomTom", target: "Hogeveen", value: 1, id: "TomTom-Hogeveen", camundaLink: "#" },
+        { source: "TomTom", target: "NEO", value: 1, id: "TomTom-NEO", camundaLink: "#" },
+        { source: "TomTom", target: "NS", value: 1, id: "TomTom-NS", camundaLink: "#" },
+        { source: "TomTom", target: "Oosterhout", value: 1, id: "TomTom-Oosterhout", camundaLink: "#" },
+        { source: "TomTom", target: "Oss", value: 1, id: "TomTom-Oss", camundaLink: "#" },
+        { source: "TomTom", target: "PZH", value: 1, id: "TomTom-PZH", camundaLink: "#" },
+        { source: "TomTom", target: "Rijkswaterstaat", value: 1, id: "TomTom-Rijkswaterstaat", camundaLink: "#" },
+        { source: "TomTom", target: "Transdev", value: 1, id: "TomTom-Transdev", camundaLink: "#" },
+        { source: "TomTom", target: "West Betuwe", value: 1, id: "TomTom-West Betuwe", camundaLink: "#" },
+        { source: "TomTom", target: "P1", value: 1, id: "TomTom-P1", camundaLink: "#" },
+        { source: "TomTom", target: "PoR", value: 1, id: "TomTom-PoR", camundaLink: "#" },
+        
+        // ARVOO
+        { source: "ARVOO", target: "Antwerp", value: 1, id: "ARVOO-Antwerp", camundaLink: "#" },
+        { source: "ARVOO", target: "P1", value: 1, id: "ARVOO-P1", camundaLink: "#" },
+        
+        // PrioCom
+        { source: "PrioCom", target: "Antwerp", value: 1, id: "PrioCom-Antwerp", camundaLink: "#" },
+        
+        // ANPR
+        { source: "ANPR", target: "Antwerp", value: 1, id: "ANPR-Antwerp", camundaLink: "#" },
+        { source: "ANPR", target: "P1", value: 1, id: "ANPR-P1", camundaLink: "#" },
+        
+        // More Optimal/Planman
+        { source: "More Optimal/Planman", target: "Antwerp", value: 1, id: "More Optimal/Planman-Antwerp", camundaLink: "#" },
+        
+        // BVBSN
+        { source: "BVBSN", target: "Altena", value: 1, id: "BVBSN-Altena", camundaLink: "#" },
+        { source: "BVBSN", target: "Hogeveen", value: 1, id: "BVBSN-Hogeveen", camundaLink: "#" },
+        { source: "BVBSN", target: "NEO", value: 1, id: "BVBSN-NEO", camundaLink: "#" },
+        { source: "BVBSN", target: "NS", value: 1, id: "BVBSN-NS", camundaLink: "#" },
+        { source: "BVBSN", target: "PZH", value: 1, id: "BVBSN-PZH", camundaLink: "#" },
+        { source: "BVBSN", target: "Oosterhout", value: 1, id: "BVBSN-Oosterhout", camundaLink: "#" },
+        { source: "BVBSN", target: "Oss", value: 1, id: "BVBSN-Oss", camundaLink: "#" },
+        { source: "BVBSN", target: "Rijkswaterstaat", value: 1, id: "BVBSN-Rijkswaterstaat", camundaLink: "#" },
+        { source: "BVBSN", target: "Transdev", value: 1, id: "BVBSN-Transdev", camundaLink: "#" },
+        { source: "BVBSN", target: "West Betuwe", value: 1, id: "BVBSN-West Betuwe", camundaLink: "#" },
+        { source: "BVBSN", target: "P1", value: 1, id: "BVBSN-P1", camundaLink: "#" },
+        { source: "BVBSN", target: "PoR", value: 1, id: "BVBSN-PoR", camundaLink: "#" },
+        
+        // SCANACAR/ACI
+        { source: "SCANACAR/ACI", target: "Antwerp", value: 1, id: "SCANACAR/ACI-Antwerp", camundaLink: "#" },
+        
+        // CJIB
+        { source: "CJIB", target: "Altena", value: 1, id: "CJIB-Altena", camundaLink: "#" },
+        { source: "CJIB", target: "Hogeveen", value: 1, id: "CJIB-Hogeveen", camundaLink: "#" },
+        { source: "CJIB", target: "NEO", value: 1, id: "CJIB-NEO", camundaLink: "#" },
+        { source: "CJIB", target: "NS", value: 1, id: "CJIB-NS", camundaLink: "#" },
+        { source: "CJIB", target: "PZH", value: 1, id: "CJIB-PZH", camundaLink: "#" },
+        { source: "CJIB", target: "Oosterhout", value: 1, id: "CJIB-Oosterhout", camundaLink: "#" },
+        { source: "CJIB", target: "Oss", value: 1, id: "CJIB-Oss", camundaLink: "#" },
+        { source: "CJIB", target: "Rijkswaterstaat", value: 1, id: "CJIB-Rijkswaterstaat", camundaLink: "#" },
+        { source: "CJIB", target: "Transdev", value: 1, id: "CJIB-Transdev", camundaLink: "#" },
+        { source: "CJIB", target: "West Betuwe", value: 1, id: "CJIB-West Betuwe", camundaLink: "#" },
+        { source: "CJIB", target: "P1", value: 1, id: "CJIB-P1", camundaLink: "#" },
+        { source: "CJIB", target: "PoR", value: 1, id: "CJIB-PoR", camundaLink: "#" },
+        
+        // Digipolis
+        { source: "Digipolis", target: "Antwerp", value: 1, id: "Digipolis-Antwerp", camundaLink: "#" },
+        
+        // OVDB
+        { source: "OVDB", target: "Antwerp", value: 1, id: "OVDB-Antwerp", camundaLink: "#" },
+        
+        // QLIK
+        { source: "QLIK", target: "P1", value: 1, id: "QLIK-P1", camundaLink: "#" },
+        { source: "QLIK", target: "PZH", value: 1, id: "QLIK-PZH", camundaLink: "#" },
+        { source: "QLIK", target: "Rijkswaterstaat", value: 1, id: "QLIK-Rijkswaterstaat", camundaLink: "#" },
+        { source: "QLIK", target: "Antwerp", value: 1, id: "QLIK-Antwerp", camundaLink: "#" },
+        
+        // Desyde
+        { source: "Desyde", target: "Oss", value: 1, id: "Desyde-Oss", camundaLink: "#" },
+        
+        // Nedap
+        { source: "Nedap", target: "Oss", value: 1, id: "Nedap-Oss", camundaLink: "#" },
+        
+        // AWS
+        { source: "AWS", target: "Antwerp", value: 1, id: "AWS-Antwerp", camundaLink: "#" },
+        { source: "AWS", target: "Altena", value: 1, id: "AWS-Altena", camundaLink: "#" },
+        { source: "AWS", target: "Hogeveen", value: 1, id: "AWS-Hogeveen", camundaLink: "#" },
+        { source: "AWS", target: "NEO", value: 1, id: "AWS-NEO", camundaLink: "#" },
+        { source: "AWS", target: "NS", value: 1, id: "AWS-NS", camundaLink: "#" },
+        { source: "AWS", target: "PZH", value: 1, id: "AWS-PZH", camundaLink: "#" },
+        { source: "AWS", target: "Oosterhout", value: 1, id: "AWS-Oosterhout", camundaLink: "#" },
+        { source: "AWS", target: "Oss", value: 1, id: "AWS-Oss", camundaLink: "#" },
+        { source: "AWS", target: "Rijkswaterstaat", value: 1, id: "AWS-Rijkswaterstaat", camundaLink: "#" },
+        { source: "AWS", target: "Transdev", value: 1, id: "AWS-Transdev", camundaLink: "#" },
+        { source: "AWS", target: "West Betuwe", value: 1, id: "AWS-West Betuwe", camundaLink: "#" },
+        { source: "AWS", target: "P1", value: 1, id: "AWS-P1", camundaLink: "#" },
+        { source: "AWS", target: "PoR", value: 1, id: "AWS-PoR", camundaLink: "#" }
+      ]
+    };
+
+    // Create the visualization
+    const width = document.querySelector('.container').clientWidth;
+    const height = document.querySelector('.container').clientHeight;
+
+    const svg = d3.select('.container')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height);
+
+    // Define forces
+    const simulation = d3.forceSimulation(data.nodes)
+      .force('link', d3.forceLink(data.links).id(d => d.id).distance(100))
+      .force('charge', d3.forceManyBody().strength(-500))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('x', d3.forceX(width / 2).strength(0.05))
+      .force('y', d3.forceY(height / 2).strength(0.05));
+
+    // Draw links
+    const link = svg.append('g')
+      .selectAll('line')
+      .data(data.links)
+      .enter()
+      .append('line')
+      .attr('class', 'link')
+      .attr('id', d => d.id);
+
+    // Create node groups
+    const node = svg.append('g')
+      .selectAll('.node')
+      .data(data.nodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('id', d => d.id)
+      .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended));
+
+    // Add circles to nodes
+    node.append('circle')
+      .attr('r', d => d.type === 'supplier' ? 10 : 8)
+      .attr('fill', d => d.type === 'supplier' ? '#1f77b4' : '#2ca02c')
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1.5);
+
+    // Add text labels to nodes
+    node.append('text')
+      .attr('dy', d => d.type === 'supplier' ? -15 : 15)
+      .text(d => d.id)
+      .attr('fill', '#333');
+
+    // Handle click events
+    node.on('click', function(event, d) {
+      if (d.type === 'supplier') {
+        highlightConnections(d);
+        showInfo(d);
+      } else if (d.type === 'customer') {
+        highlightCustomerConnections(d);
+        showInfo(d);
+      }
+    });
+
+    // Handle link clicks
+    link.on('click', function(event, d) {
+      // Get the Camunda process diagram link
+      // In a real implementation, you'd replace '#' with actual links to Camunda diagrams
+      if (d.camundaLink && d.camundaLink !== '#') {
+        window.open(d.camundaLink, '_blank');
+      } else {
+        alert('Camunda process diagram link not yet configured for this relationship. You can add these links in the data.links array.');
+      }
+    });
+
+    // Implement highlighting functions
+    function highlightConnections(d) {
+      // Reset previous highlighting
+      resetHighlighting();
+      
+      // Find connected customers
+      const connectedLinks = data.links.filter(link => link.source.id === d.id || link.source === d.id);
+      const connectedCustomers = connectedLinks.map(link => 
+        typeof link.target === 'object' ? link.target.id : link.target
+      );
+      
+      // Highlight links
+      link.classed('dimmed', function(o) {
+        return !(o.source.id === d.id || o.source === d.id);
+      });
+      
+      link.classed('highlighted', function(o) {
+        return o.source.id === d.id || o.source === d.id;
+      });
+      
+      // Highlight nodes
+      node.style('opacity', function(o) {
+        return o.id === d.id || connectedCustomers.includes(o.id) ? 1 : 0.3;
+      });
+    }
+
+    function highlightCustomerConnections(d) {
+      // Reset previous highlighting
+      resetHighlighting();
+      
+      // Find connected suppliers
+      const connectedLinks = data.links.filter(link => 
+        (typeof link.target === 'object' && link.target.id === d.id) || 
+        (typeof link.target === 'string' && link.target === d.id)
+      );
+      
+      const connectedSuppliers = connectedLinks.map(link => 
+        typeof link.source === 'object' ? link.source.id : link.source
+      );
+      
+      // Highlight links
+      link.classed('dimmed', function(o) {
+        const targetId = typeof o.target === 'object' ? o.target.id : o.target;
+        return !(targetId === d.id);
+      });
+      
+      link.classed('highlighted', function(o) {
+        const targetId = typeof o.target === 'object' ? o.target.id : o.target;
+        return targetId === d.id;
+      });
+      
+      // Highlight nodes
+      node.style('opacity', function(o) {
+        return o.id === d.id || connectedSuppliers.includes(o.id) ? 1 : 0.3;
+      });
+    }
+
+    function resetHighlighting() {
+      link.classed('highlighted', false);
+      link.classed('dimmed', false);
+      node.style('opacity', 1);
+      d3.select('.info-panel').style('display', 'none');
+    }
+
+    function showInfo(d) {
+      const infoPanel = d3.select('.info-panel');
+      const infoTitle = d3.select('#info-title');
+      const infoContent = d3.select('#info-content');
+      
+      infoPanel.style('display', 'block');
+      
+      if (d.type === 'supplier') {
+        const connectedLinks = data.links.filter(link => link.source.id === d.id || link.source === d.id);
+        const connectedCustomers = connectedLinks.map(link => 
+          typeof link.target === 'object' ? link.target.id : link.target
+        );
+        
+        infoTitle.text(`Supplier: ${d.id}`);
+        infoContent.html(`
+          <p><strong>Impacts ${connectedCustomers.length} customers:</strong></p>
+          <ul style="padding-left: 20px; margin-top: 5px;">
+            ${connectedCustomers.map(customer => `<li>${customer}</li>`).join('')}
+          </ul>
+          <p style="margin-top: 10px;"><small>Click on connections to view Camunda processes</small></p>
+        `);
+      } else {
+        const connectedLinks = data.links.filter(link => 
+          (typeof link.target === 'object' && link.target.id === d.id) || 
+          (typeof link.target === 'string' && link.target === d.id)
+        );
+        
+        const connectedSuppliers = connectedLinks.map(link => 
+          typeof link.source === 'object' ? link.source.id : link.source
+        );
+        
+        infoTitle.text(`Customer: ${d.id}`);
+        infoContent.html(`
+          <p><strong>Uses ${connectedSuppliers.length} suppliers:</strong></p>
+          <ul style="padding-left: 20px; margin-top: 5px;">
+            ${connectedSuppliers.map(supplier => `<li>${supplier}</li>`).join('')}
+          </ul>
+          <p style="margin-top: 10px;"><small>Click on connections to view Camunda processes</small></p>
+        `);
+      }
+    }
+
+    // Add reset button functionality
+    d3.select('.reset-button').on('click', resetHighlighting);
+
+    // Force simulation tick function
+    simulation.on('tick', () => {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+
+      node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  </script>
+</body>
+</html>
