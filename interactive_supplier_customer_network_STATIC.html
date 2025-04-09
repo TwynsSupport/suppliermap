@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Supplier-Customer Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+        }
+        .node text {
+            font-size: 10px;
+            pointer-events: none;
+        }
+        .dimmed {
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body>
+    <h2>Interactive Supplier-Customer Map (Precomputed Layout)</h2>
+    <svg width="1200" height="800"><line class="link" x1="850.0" y1="400.0" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="850.0" y1="400.0" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="850.0" y1="400.0" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="850.0" y1="400.0" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="850.0" y1="400.0" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="850.0" y1="400.0" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="850.0" y1="400.0" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="850.0" y1="400.0" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="850.0" y1="400.0" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="834.9231551964771" y1="485.50503583141716" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="458.1580451829858" y2="774.006497074166"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="827.2258986924622" y2="70.80645364253735"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="791.5111107797445" y1="560.6969024216348" x2="458.15804518298563" y2="25.993502925834093"></line>
+<line class="link" x1="725.0" y1="616.5063509461097" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="725.0" y1="616.5063509461097" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="643.4120444167326" y1="646.201938253052" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="556.5879555832674" y1="646.201938253052" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="556.5879555832674" y1="646.201938253052" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="408.4888892202555" y1="560.6969024216348" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="458.1580451829858" y2="774.006497074166"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="827.2258986924622" y2="70.80645364253735"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="350.0" y1="400.00000000000006" x2="458.15804518298563" y2="25.993502925834093"></line>
+<line class="link" x1="365.07684480352293" y1="314.49496416858284" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="458.1580451829858" y2="774.006497074166"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="827.2258986924622" y2="70.80645364253735"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="408.4888892202555" y1="239.3030975783652" x2="458.15804518298563" y2="25.993502925834093"></line>
+<line class="link" x1="474.9999999999999" y1="183.4936490538904" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="643.4120444167324" y1="153.79806174694798" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="643.4120444167324" y1="153.79806174694798" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="643.4120444167324" y1="153.79806174694798" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="643.4120444167324" y1="153.79806174694798" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="725.0" y1="183.49364905389035" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="791.5111107797445" y1="239.3030975783651" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="954.182410261284" y2="585.8892688175074"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="1000.0" y2="400.0"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="827.2258986924624" y2="729.1935463574625"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="648.2146721021293" y2="797.0835496392216"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="458.1580451829858" y2="774.006497074166"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="300.5957007315595" y2="134.750936703682"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="300.59570073155965" y2="665.2490632963181"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="211.62327302957925" y2="495.72626571502326"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="648.2146721021289" y2="2.916450360778356"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="827.2258986924622" y2="70.80645364253735"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="954.1824102612838" y2="214.11073118249234"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="211.62327302957914" y2="304.273734284977"></line>
+<line class="link" x1="834.923155196477" y1="314.49496416858267" x2="458.15804518298563" y2="25.993502925834093"></line>
+
+    <g class="node supplier" transform="translate(850.0,400.0)" onclick="highlight('RDW')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">RDW</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(834.9231551964771,485.50503583141716)" onclick="highlight('NPR')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">NPR</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(791.5111107797445,560.6969024216348)" onclick="highlight('TomTom')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">TomTom</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(725.0,616.5063509461097)" onclick="highlight('ARVOO')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">ARVOO</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(643.4120444167326,646.201938253052)" onclick="highlight('PrioCom')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">PrioCom</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(556.5879555832674,646.201938253052)" onclick="highlight('ANPR')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">ANPR</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(475.00000000000006,616.5063509461097)" onclick="highlight('Callcare')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">Callcare</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(408.4888892202555,560.6969024216348)" onclick="highlight('More Optimal/Planman')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">More Optimal/Planman</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(365.07684480352293,485.5050358314172)" onclick="highlight('LimeNetworks')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">LimeNetworks</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(350.0,400.00000000000006)" onclick="highlight('BVBSN')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">BVBSN</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(365.07684480352293,314.49496416858284)" onclick="highlight('SCANACAR/ACI')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">SCANACAR/ACI</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(408.4888892202555,239.3030975783652)" onclick="highlight('CJIB')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">CJIB</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(474.9999999999999,183.4936490538904)" onclick="highlight('Digipolis')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">Digipolis</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(556.5879555832674,153.798061746948)" onclick="highlight('OVDB')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">OVDB</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(643.4120444167324,153.79806174694798)" onclick="highlight('QLIK')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">QLIK</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(725.0,183.49364905389035)" onclick="highlight('Desyde')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">Desyde</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(791.5111107797445,239.3030975783651)" onclick="highlight('Nedap')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">Nedap</text>
+    </g>
+    
+    <g class="node supplier" transform="translate(834.923155196477,314.49496416858267)" onclick="highlight('AWS')">
+        <circle r="20" fill="#f8cecc" stroke="#b85450"></circle>
+        <text dy="4" text-anchor="middle">AWS</text>
+    </g>
+    
+    <g class="node customer" transform="translate(1000.0,400.0)" onclick="highlight('Altena')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Altena</text>
+    </g>
+    
+    <g class="node customer" transform="translate(954.182410261284,585.8892688175074)" onclick="highlight('Antwerp')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Antwerp</text>
+    </g>
+    
+    <g class="node customer" transform="translate(827.2258986924624,729.1935463574625)" onclick="highlight('Hogeveen')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Hogeveen</text>
+    </g>
+    
+    <g class="node customer" transform="translate(648.2146721021293,797.0835496392216)" onclick="highlight('NEO')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">NEO</text>
+    </g>
+    
+    <g class="node customer" transform="translate(458.1580451829858,774.006497074166)" onclick="highlight('NS')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">NS</text>
+    </g>
+    
+    <g class="node customer" transform="translate(300.59570073155965,665.2490632963181)" onclick="highlight('Oosterhout')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Oosterhout</text>
+    </g>
+    
+    <g class="node customer" transform="translate(211.62327302957925,495.72626571502326)" onclick="highlight('Oss')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Oss</text>
+    </g>
+    
+    <g class="node customer" transform="translate(211.62327302957914,304.273734284977)" onclick="highlight('P1')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">P1</text>
+    </g>
+    
+    <g class="node customer" transform="translate(300.5957007315595,134.750936703682)" onclick="highlight('PZH')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">PZH</text>
+    </g>
+    
+    <g class="node customer" transform="translate(458.15804518298563,25.993502925834093)" onclick="highlight('PoR')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">PoR</text>
+    </g>
+    
+    <g class="node customer" transform="translate(648.2146721021289,2.916450360778356)" onclick="highlight('Rijkswaterstaat')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Rijkswaterstaat</text>
+    </g>
+    
+    <g class="node customer" transform="translate(827.2258986924622,70.80645364253735)" onclick="highlight('Transdev')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">Transdev</text>
+    </g>
+    
+    <g class="node customer" transform="translate(954.1824102612838,214.11073118249234)" onclick="highlight('West Betuwe')">
+        <circle r="20" fill="#fff2cc" stroke="#d6b656"></circle>
+        <text dy="4" text-anchor="middle">West Betuwe</text>
+    </g>
+    </svg>
+
+    <script>
+        function highlight(supplierId) {
+            const nodes = document.querySelectorAll('.node');
+            const links = document.querySelectorAll('.link');
+            nodes.forEach(n => {
+                if (n.classList.contains('supplier')) return;
+                if (!document.querySelector(`.link[x1="{}"][x2="{}"]`)) {
+                    n.classList.add('dimmed');
+                } else {
+                    n.classList.remove('dimmed');
+                }
+            });
+            links.forEach(link => {
+                if (link.getAttribute("x1") === supplierId) {
+                    link.classList.remove('dimmed');
+                } else {
+                    link.classList.add('dimmed');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
